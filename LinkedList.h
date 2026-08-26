@@ -72,8 +72,8 @@ class List{
 
         List(){
 
-            this->first_node = new Node();
-            this->length = 1;
+            this->first_node = nullptr;
+            this->length = 0;
 
         }
 
@@ -101,7 +101,7 @@ class List{
                 p_previous = p_previous->getPrevious();
             }
 
-            this->set(0, 0);
+            delete this->first_node;
             
         }
 
@@ -109,6 +109,8 @@ class List{
 
             if (index >= this->length || index < 0){
                 throw "ArrayIndexOutOfBounds";
+            } else if (this->isEmpty()){
+                return NULL;
             }
 
             Node* p_target = this->getNode(index);
@@ -118,10 +120,8 @@ class List{
 
         void set(int value, int index){ // Stores a value in an existing node
             
-            if (index > this->length || index < 0){
+            if (index >= this->len() || index < 0){
                 throw "ArrayIndexOutOfBounds";
-            } else if (index == this->length){
-                this->add(value);
             }
 
             Node* p_target = this->getNode(index);
@@ -131,13 +131,17 @@ class List{
 
         void remove(int index){ // Removes a node, pulling back all subsequent nodes
 
-            if (index > this->length || index < 0){
+            if (index >= this->len() || index < 0){
                 throw "ArrayIndexOutOfBounds";
             }
 
             Node* p_target = this->getNode(index);
 
-            if (index == 0){
+            if (this->len() == 1){
+
+                delete this->first_node;
+
+            } else if (index == 0){
 
                 Node* p_next = p_target->getNext();
                 this->first_node = p_next;
@@ -171,6 +175,14 @@ class List{
 
         void add(int value){ // Adds a node with a given value to the end of the list
 
+            if (this->isEmpty()){
+
+                this->first_node = new Node(nullptr, value, nullptr);
+                this->length++;
+                return;
+
+            }
+
             Node* p_last = this->getNode(this->len() - 1);
             Node* p_added_node = new Node(p_last, value);
 
@@ -182,7 +194,16 @@ class List{
 
         void add(int value, int index){ // Adds a node with a given value to any point of the list
 
-            if (index == 0){
+            if (this->isEmpty() && index == 0){
+
+                this->add(value);
+                return;
+
+            } else if ((this->isEmpty() && index != 0) || index >= this->len() || index < 0){
+
+                throw "ArrayIndexOutOfBounds";
+
+            } else if (index == 0){
 
                 Node* p_target = this->getNode(index);
                 Node* p_added = new Node(nullptr, value, p_target);
@@ -191,11 +212,6 @@ class List{
                 p_target->setPrevious(p_added);
 
                 this->length++;
-                return;
-
-            } else if (index == this->len() - 1){
-
-                this->add(value);
                 return;
 
             }
@@ -235,24 +251,3 @@ class List{
         }
 
 };
-
-int main(){
-    List my_list;
-
-    my_list.set(10, 0);
-    my_list.add(20);
-    my_list.add(30);
-    my_list.add(40);
-
-    for (int i = 0; i < my_list.len(); i++){
-        std::cout << my_list.get(i) << "\n";
-    }
-
-    my_list.remove(1);
-
-    my_list.add(200, 1);
-
-    std::cout << my_list.get(1) << "\n";
-
-    return 0;
-}
