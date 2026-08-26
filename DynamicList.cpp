@@ -4,45 +4,59 @@ class Node{
     public:
 
         Node(Node* previous = nullptr, int value = 0, Node* next = nullptr){
+
             this->setPrevious(previous);
             this->setValue(value);
             this->setNext(next);
+
         }
 
-        int getValue(){
+        int getValue(){ // Returns element currently stored in this node
+
             return this->value;
+
         }
 
-        Node* getNext(){
+        Node* getNext(){ // Returns pointer to next node in list
+
             return this->next;
+
         }
 
-        Node* getPrevious(){
+        Node* getPrevious(){ // Returns pointer to previous node in list
+
             return this->previous;
+
         }
 
-        void setValue(int new_value){
+        void setValue(int new_value){ // Sets element stored in this node
+
             this->value = new_value;
+
         }
 
-        void setNext(Node* new_next){
+        void setNext(Node* new_next){ // Sets pointer to a new next node
 
             this->next = new_next;
 
         }
 
-        void setPrevious(Node* new_previous){
+        void setPrevious(Node* new_previous){ // Sets pointer to a new previous node
 
             this->previous = new_previous;
 
         }
 
-        void unsetNext(){
+        void unsetNext(){ // Sets next node to null pointer
+
             this->next = nullptr;
+
         }
 
-        void unsetPrevious(){
+        void unsetPrevious(){ // Sets previous node to null pointer
+
             this->previous = nullptr;
+
         }
 
     private:
@@ -57,19 +71,25 @@ class List{
     public:
 
         List(){
+
             this->first_node = new Node();
             this->length = 1;
+
         }
 
-        int len(){
+        int len(){ // Returns list length
+
             return this->length;
+
         }
 
-        bool isEmpty(){
+        bool isEmpty(){ // Returns true if list is empty
+
             return (this->len() == 0);
+
         }
 
-        void clear(){
+        void clear(){ // Deletes all nodes in the list
 
             Node* p_last = this->getNode(this->len() - 1);
             Node* p_previous = p_last->getPrevious();
@@ -85,7 +105,7 @@ class List{
             
         }
 
-        int get(int index){
+        int get(int index){ // Returns the value stored at a given index
 
             if (index >= this->length || index < 0){
                 throw "ArrayIndexOutOfBounds";
@@ -96,7 +116,7 @@ class List{
 
         }
 
-        void set(int value, int index){
+        void set(int value, int index){ // Stores a value in an existing node
             
             if (index > this->length || index < 0){
                 throw "ArrayIndexOutOfBounds";
@@ -109,7 +129,7 @@ class List{
 
         }
 
-        void remove(int index){
+        void remove(int index){ // Removes a node, pulling back all subsequent nodes
 
             if (index > this->length || index < 0){
                 throw "ArrayIndexOutOfBounds";
@@ -143,12 +163,13 @@ class List{
 
             p_previous->setNext(p_next);
             p_next->setPrevious(p_previous);
+
             delete p_target;
 
             this->length--;
         }
 
-        void add(int value){
+        void add(int value){ // Adds a node with a given value to the end of the list
 
             Node* p_last = this->getNode(this->len() - 1);
             Node* p_added_node = new Node(p_last, value);
@@ -159,37 +180,35 @@ class List{
             
         }
 
-        void add(int value, int index){
-
-            // std::cout << "1-" << "\n";
+        void add(int value, int index){ // Adds a node with a given value to any point of the list
 
             if (index == 0){
 
                 Node* p_target = this->getNode(index);
-                this->length++;
                 Node* p_added = new Node(nullptr, value, p_target);
+
                 this->first_node = p_added;
                 p_target->setPrevious(p_added);
 
+                this->length++;
+                return;
 
             } else if (index == this->len() - 1){
 
                 this->add(value);
+                return;
 
             }
-            else{
 
             Node* p_target = this->getNode(index);
             Node* p_previous = p_target->getPrevious();
-
-            this->length++;
             Node* p_added = new Node(p_previous, value, p_target);
 
+            this->length++;
+
             p_previous->setNext(p_added);
-
             p_target->setPrevious(p_added);
-        }
-
+        
         }
 
     private:
@@ -197,7 +216,7 @@ class List{
         Node* first_node;
         int length;
 
-        Node* getNode(int index){
+        Node* getNode(int index){ // Returns a pointer to the node at the given index
 
             if (index >= this->len() || index < 0){
                 return nullptr;
