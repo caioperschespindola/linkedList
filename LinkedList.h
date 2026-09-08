@@ -77,6 +77,31 @@ class List{
 
         }
 
+        void getBackToFront(int* array){ // Fills the given array with all elements in the list in reverse order
+            int index = this->len() - 1;
+            this->getBackToFront(array, index);
+        }
+
+        void getBackToFront(int* array, int index){
+            if (index <= 0){
+                return;
+            } else {
+                int rev_index = this->len() - 1 - index;
+                array[rev_index] = this->get(index);
+                this->getBackToFront(array, index-1);
+            }
+        }
+
+        void toArray(int* array){ // Fills the given array with all elements in the list
+            if (sizeof(array)/sizeof(int) != this->len()){
+                throw "ArrayIndexOutOfBounds";
+            }
+
+            for (int i = 0; i < this->len(); i++){
+                array[i] = this->get(i);
+            }
+        }
+
         int len(){ // Returns list length
 
             return this->length;
